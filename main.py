@@ -2,6 +2,7 @@ import os
 import argparse
 import sys
 import traceback
+from collections import OrderedDict 
 
 from trie_datastructure import Trie
 
@@ -75,8 +76,7 @@ def execute(user_input=None, input_name=[], my_trie = None):
         my_trie(Object): instance of Trie class.
 
     Return:
-        Set: set of result string incase of valid input.
-        List: in case of invalid input
+        List
 
     '''
     is_input_valid = validate_user_input(input_name, True)
@@ -96,7 +96,11 @@ def execute(user_input=None, input_name=[], my_trie = None):
             if my_trie.search(name):
                 search_result.append(name)
             search_result.extend(my_trie.prefix_search(name))
-            return set(search_result)
+
+            res = OrderedDict()
+            for item in search_result:
+                res[item] = 1
+            return list(res.keys())
     else:
         return ["Input name is not valid."]
         

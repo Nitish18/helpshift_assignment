@@ -4,6 +4,10 @@ import unittest
 current_dir = os.getcwd()
 sys.path.append(current_dir)
 
+path = os.path.abspath(__file__)
+path = path.split('test.py')
+sys.path.append(path[0])
+
 from main import execute
 from trie_datastructure import Trie
 
@@ -57,7 +61,7 @@ class TestWordSearch(unittest.TestCase):
 
         inserting_name = execute(1, ['John', 'Doe'], self.trie_obj)
         res = execute(2, ['John', 'Doe'], self.trie_obj)
-        correct_res = {'John Doe'}
+        correct_res = ['John Doe']
         self.assertEqual(res, correct_res)
     
     def test_search_name_success_2(self):
@@ -66,7 +70,7 @@ class TestWordSearch(unittest.TestCase):
         """
         inserting_name = execute(1, ['Alex'], self.trie_obj)
         res = execute(2, ['Alex'], self.trie_obj)
-        correct_res = {'Alex'}
+        correct_res = ['Alex']
         self.assertEqual(res, correct_res)
 
     def test_search_name_fail(self):
@@ -75,7 +79,7 @@ class TestWordSearch(unittest.TestCase):
         """
         inserting_name = execute(1, ['Donald'], self.trie_obj)
         res = execute(2, ['Trump'], self.trie_obj)
-        correct_res = set() # empty set
+        correct_res = [] # empty List
         self.assertEqual(res, correct_res)
     
     

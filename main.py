@@ -34,7 +34,7 @@ def main():
 
 def execute_using_cli():
     """
-    method called during CLI.
+    CLI mode.
     User can type commands to perform particular operation.
 
     Returns
@@ -43,6 +43,7 @@ def execute_using_cli():
         prints output on terminal.
     """
 
+    # initializing trie class object.
     my_trie = Trie()
 
     while(1):
@@ -64,6 +65,7 @@ def execute_using_cli():
                     name = name.rstrip()
 
                     if int(user_input) == 1:
+                        # inserting name into trie.
                         my_trie.insert(name)
                     elif int(user_input) == 2:
                         search_result = []
@@ -73,7 +75,6 @@ def execute_using_cli():
                         print(search_result)
                 else:
                     print("Input name is not valid.")
-    
         else:
             print("Input is not valid. Try again !")
         
@@ -82,6 +83,9 @@ def execute_using_cli():
 def validate_user_input(user_input = None, check_name = False):
     """
     method to validate user input.
+    checking two things :
+    1. if name is valid i.e having maximum two words for first and last name.
+    2. if user input is a valid integer.
     
     Parameters
     ----------

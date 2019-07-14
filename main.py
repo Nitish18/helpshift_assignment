@@ -56,33 +56,54 @@ def execute_using_cli():
                 break
             else:
                 input_name = input("Enter name: ").split(' ')
-                is_input_valid = validate_user_input(input_name, True)
-                if is_input_valid:
-                    name = ''
-                    for item in input_name:
-                        name += str(item)
-                        name += str(" ")
-                    name = name.rstrip()
-
-                    if int(user_input) == 1:
-                        # inserting name into trie.
-                        my_trie.insert(name)
-                    elif int(user_input) == 2:
-                        search_result = []
-                        if my_trie.search(name) and len(input_name)>1:
-                            search_result.append(name)
-                        search_result.extend(my_trie.prefix_search(name))
-                        print(search_result)
-                else:
-                    print("Input name is not valid.")
+                res = execute(user_input, input_name, my_trie)
+                if res:
+                    # printing on STDOUT the final result.
+                    for item in res:
+                        print(item)
         else:
             print("Input is not valid. Try again !")
+
+
+def execute(user_input=None, input_name=[], my_trie = None):
+    '''
+    function to execute main business logic of code flow according to input type.
+
+    Args:
+        user_input(String): type of operation such as 1 (Insert), 2 (Searching)
+        input_name(List): list of items entered by user in format of first name and last name.
+        my_trie(Object): instance of Trie class.
+
+    Return:
+        Set: set of result string incase of valid input.
+        List: in case of invalid input
+
+    '''
+    is_input_valid = validate_user_input(input_name, True)
+    if is_input_valid:
+        name = ''
+        for item in input_name:
+            name += str(item)
+            name += str(" ")
+        name = name.rstrip()
+
+        if int(user_input) == 1:
+            # inserting name into trie.
+            my_trie.insert(name)
+        elif int(user_input) == 2:
+            # searching through trie.
+            search_result = []
+            if my_trie.search(name):
+                search_result.append(name)
+            search_result.extend(my_trie.prefix_search(name))
+            return set(search_result)
+    else:
+        return ["Input name is not valid."]
         
     
-
 def validate_user_input(user_input = None, check_name = False):
     """
-    method to validate user input.
+    function to validate user input.
     checking two things :
     1. if name is valid i.e having maximum two words for first and last name.
     2. if user input is a valid integer.

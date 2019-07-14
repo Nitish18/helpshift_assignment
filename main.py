@@ -3,6 +3,8 @@ import argparse
 import sys
 import traceback
 
+from trie_datastructure import Trie
+
 current_dir = os.getcwd()
 sys.path.append(current_dir)
 
@@ -40,6 +42,9 @@ def execute_using_cli():
     STDOUT
         prints output on terminal.
     """
+
+    my_trie = Trie()
+
     while(1):
         print("1) Add contact 2) Search 3) Exit")
         user_input = input()
@@ -49,13 +54,32 @@ def execute_using_cli():
                 print("Happy Searching")
                 break
             else:
-                print("processing")
+                input_name = input("Enter name: ").split(' ')
+                is_input_valid = validate_user_input(input_name, True)
+                if is_input_valid:
+                    name = ''
+                    for item in input_name:
+                        name += str(item)
+                        name += str(" ")
+                    name = name.rstrip()
+
+                    if int(user_input) == 1:
+                        my_trie.insert(name)
+                    elif int(user_input) == 2:
+                        search_result = []
+                        if my_trie.search(name) and len(input_name)>1:
+                            search_result.append(name)
+                        search_result.extend(my_trie.prefix_search(name))
+                        print(search_result)
+                else:
+                    print("Input name is not valid.")
+    
         else:
             print("Input is not valid. Try again !")
         
     
 
-def validate_user_input(user_input = None):
+def validate_user_input(user_input = None, check_name = False):
     """
     method to validate user input.
     
@@ -63,6 +87,8 @@ def validate_user_input(user_input = None):
     ----------
     user_input : string
         input typed by user
+    check_name : Boolean
+        type of input validation.
     
     Returns
     ------
@@ -70,10 +96,15 @@ def validate_user_input(user_input = None):
         true (user input is valid) or false (invalid input).
     """
     try:
-        user_input = int(user_input)
-        if user_input >= 1 and user_input <= 3:
+        if check_name:
+            if len(user_input)>2:
+                return False
             return True
-        return False
+        else:
+            user_input = int(user_input)
+            if user_input >= 1 and user_input <= 3:
+                return True
+            return False
     except Exception as e:
         return False
     
